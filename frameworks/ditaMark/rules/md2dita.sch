@@ -206,7 +206,7 @@
                 <sqf:delete/>
             </sqf:fix>
             <!-- Convert inline code to codeph -->
-            <sch:report test="matches(., '`..*`')" role="info" sqf:fix="convertMarkdowncode2Codeph">
+            <sch:report test="matches(., '`.[^`].*`')" role="info" sqf:fix="convertMarkdowncode2Codeph">
                 Paragraph contains inline code fragments! These should be converted to 
                 DITA code phase (codeph) elements.
             </sch:report>
