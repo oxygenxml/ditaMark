@@ -63,6 +63,18 @@
                 logo](https://www.oxygenxml.com/img/resources/oxygen190x62.png) which is rendered
                 inline.</p>
         </section>
+        <section id="section_z1g_qjx_4x">
+            <title>Tables</title>
+            <p>We can convert tables with header row:</p>
+            <p>|test|table|conversion|</p>
+            <p>|-|-|-|</p>
+            <p>|1|2|3|</p>
+            <p>|1|2|3|</p>
+            <p>We can convert tables without a header row: </p>
+            <p>|-|-|-|</p>
+            <p>|1|2|3|</p>
+            <p>|1|2|3|</p>
+        </section>
         <section id="section_lqq_5yt_4x">
             <title>Sections</title>
             <p>Sections can be easily created by using ## to mark their title.</p>

@@ -3,7 +3,6 @@
     xmlns:sqf="http://www.schematron-quickfix.com/validator/process"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-
     <xsl:template match="node() | @*" mode="copyExceptPrefix">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="copy"/>
@@ -71,8 +70,6 @@
             <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
         </xsl:analyze-string>
     </xsl:template>
-
-    
     
     <xsl:template match="node() | @*" mode="fixQuickLinks">
         <xsl:copy>
@@ -106,6 +103,53 @@
             </xsl:matching-substring>
             <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
         </xsl:analyze-string>
+    </xsl:template>
+
+
+    <xsl:template match="p" mode="tableHead">
+        <thead>
+            <row>
+               <xsl:analyze-string select="." regex="\|" flags="s">
+                    <xsl:matching-substring/>
+                    <xsl:non-matching-substring>
+                        <entry><xsl:value-of select="."/></entry>
+                    </xsl:non-matching-substring>
+                </xsl:analyze-string>                 
+            </row>
+        </thead>
+    </xsl:template>
+    
+    <xsl:template match="p" mode="tableRow">
+        <row>
+           <xsl:analyze-string select="." regex="\|" flags="s">
+                <xsl:matching-substring/>
+                <xsl:non-matching-substring>
+                    <entry><xsl:value-of select="."/></entry>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>                 
+        </row>
+        <xsl:apply-templates select="following-sibling::*[1][self::p][starts-with(., '|')]" mode="tableRow"/>
+    </xsl:template>
+    
+    <xsl:template match="p" mode="createTable">
+        <xsl:variable name="cols" select="string-length(.) - string-length(translate(., '|', '')) - 1"/>
+        <table>
+            <tgroup cols="{$cols}">
+                <xsl:analyze-string select="." regex="\|" flags="s">
+                    <xsl:matching-substring>
+                        <xsl:if test="position()!=last()">
+                            <colspec colname="col{(position()+1) div 2}"/>
+                        </xsl:if>
+                    </xsl:matching-substring>
+                    <xsl:non-matching-substring/>
+                </xsl:analyze-string>
+                <xsl:apply-templates select="preceding-sibling::*[1][self::p][starts-with(., '|')]"
+                    mode="tableHead"/>
+                <tbody>
+                    <xsl:apply-templates select="following-sibling::*[1][self::p][starts-with(., '|')]" mode="tableRow"/>
+                </tbody>
+            </tgroup>
+        </table>
     </xsl:template>
 
     <sch:pattern id="lists-codeblocks-quotes">
@@ -369,7 +413,7 @@
             <sch:let name="this" value="."/>
             <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
             <sch:let name="prefix" value="substring($text, 1, 3)"/>
-            <!-- Convert to sections -->
+            <!-- Convert to section -->
             <sch:report test="starts-with($text, '## ')" 
                 role="info" sqf:fix="createSection">
                 Section titles should be marked with a title element and placed within a section.
@@ -393,6 +437,75 @@
                 <sqf:delete/>
             </sqf:fix>
         </sch:rule>
+        
+        <sch:rule context="section/*[last()][self::p]">
+            <sch:let name="this" value="."/>
+            <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
+            <sch:let name="prefix" value="substring($text, 1, 3)"/>
+            <!-- Create section after -->
+            <sch:report test="starts-with(., '## ')" 
+                role="info" sqf:fix="createSectionAfter">
+                Section titles should be marked with a title element and placed within a section.
+            </sch:report>
+            
+            <sqf:fix id="createSectionAfter">
+                <sqf:description>
+                    <sqf:title>Create a new section with this title after the current section</sqf:title>
+                </sqf:description>
+                
+                <sqf:add match=".." position="after">
+                    <section>
+                        <title>
+                            <xsl:apply-templates select="*[last()]/node()" mode="copyExceptPrefix">
+                                <xsl:with-param name="prefix" select="$prefix"/>
+                            </xsl:apply-templates>
+                        </title>
+                        <p></p>
+                    </section>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
     </sch:pattern>
 
+    <sch:pattern id="tables">
+        <sch:rule context="p[starts-with(., '|-')]">
+            <sch:let name="this" value="."/>
+            <!-- Convert to table -->
+            <sch:report test="matches(., '|\-(\-*)(|\-(\-*))*|', 's')" 
+                role="info" sqf:fix="createTable createSimpleTable">
+                Tables should be marked with a table element.
+            </sch:report>
+            
+            <sqf:fix id="createTable" use-when="preceding-sibling::*[1][self::p][starts-with(., '|')]">
+                <sqf:description>
+                    <sqf:title>Create a table</sqf:title>
+                </sqf:description>
+                <sqf:add position="after">
+                    <xsl:apply-templates select="." mode="createTable"/>
+                </sqf:add>
+                <sqf:delete match="following-sibling::p[starts-with(., '|')][
+                    preceding-sibling::*[not(starts-with(., '|'))][1]/following-sibling::*=$this
+                    or not(preceding-sibling::*[not(starts-with(., '|'))])
+                    ]"/>
+                <sqf:delete match="preceding-sibling::*[1][self::p][starts-with(., '|')]"/>
+                <!-- this actually deletes the current p -->
+                <sqf:delete match="preceding-sibling::p[1]"/>
+            </sqf:fix>
+            
+            <sqf:fix id="createSimpleTable" use-when="not(preceding-sibling::*[1][self::p][starts-with(., '|')])">
+                <sqf:description>
+                    <sqf:title>Create a table</sqf:title>
+                </sqf:description>
+                <sqf:add position="after">
+                    <xsl:apply-templates select="." mode="createTable"/>
+                </sqf:add>
+                <sqf:delete match="following-sibling::p[starts-with(., '|')][
+                    preceding-sibling::*[not(starts-with(., '|'))][1]/following-sibling::*=$this
+                    or not(preceding-sibling::*[not(starts-with(., '|'))])
+                    ]"/>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
+    </sch:pattern>
 </sch:schema>
