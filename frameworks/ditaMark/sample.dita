@@ -32,6 +32,8 @@
         <p>``` code </p>
         <p>Links are also detected and converted to cross references, like this one: </p>
         <p>See the [oXygen website](http://www.oxygenxml.com) for more details.</p>
+        <p>Or we can have quick links &lt;http://www.oxygenxml.com> and these also can be converted
+            to DITA cross references.</p>
         <p>We can combine a link and a list</p>
         <p>* See the [oXygen website](http://www.oxygenxml.com) for more details.</p>
         <p>We can handle also `inline code` markup [oXygen website](http://www.oxygenxml.com).</p>

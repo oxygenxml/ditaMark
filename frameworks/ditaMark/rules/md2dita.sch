@@ -38,6 +38,24 @@
         </xsl:analyze-string>
     </xsl:template>
     
+    <xsl:template match="node() | @*" mode="fixQuickLinks">
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*" mode="fixQuickLinks"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="node()[self::text()]" mode="fixQuickLinks">
+        <xsl:analyze-string select="." regex="&lt;http(s?)://.*>">
+            <xsl:matching-substring>
+                <xsl:element name="xref">
+                    <xsl:attribute name="format">html</xsl:attribute>
+                    <xsl:attribute name="scope">external</xsl:attribute>
+                    <xsl:attribute name="href" select="substring-before(substring-after(., '&lt;'), '>')"/>
+                </xsl:element>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
+        </xsl:analyze-string>
+    </xsl:template>
+    
     <xsl:template match="node() | @*" mode="fixInlineCode">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="fixInlineCode"/>
@@ -205,6 +223,25 @@
                 </sqf:add>
                 <sqf:delete/>
             </sqf:fix>
+            
+            <!-- Convert Markdown quick links to DITA cross referernces -->
+            <sch:report test="matches(., '&lt;http(s?)://.*>')" role="info" sqf:fix="convertMarkdownQuickLinks2XReferences">
+                Paragraph contains links in Markdown format! These should be converted to 
+                DITA cross references.
+            </sch:report>
+            <sqf:fix id="convertMarkdownQuickLinks2XReferences">
+                <sqf:description>
+                    <sqf:title>Transform Markdown quick links to DITA cross references</sqf:title>
+                </sqf:description>
+                <sqf:add position="after">
+                    <xsl:apply-templates mode="fixQuickLinks" select="."/>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+            
+            
+            
+            
             <!-- Convert inline code to codeph -->
             <sch:report test="matches(., '`.[^`].*`')" role="info" sqf:fix="convertMarkdowncode2Codeph">
                 Paragraph contains inline code fragments! These should be converted to 
