@@ -25,7 +25,7 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[self::text()]" mode="fixLinks">
-        <xsl:analyze-string select="." regex="\[.*\]\(.*\)">
+        <xsl:analyze-string select="." regex="\[.*\]\(.*\)" flags="s">
             <xsl:matching-substring>
                 <xsl:element name="xref">
                     <xsl:attribute name="format">html</xsl:attribute>
@@ -37,6 +37,42 @@
             <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
         </xsl:analyze-string>
     </xsl:template>
+    
+    <xsl:template match="node() | @*" mode="fixImages">
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*" mode="fixImages"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="node()[self::text()]" mode="fixImages">
+        <xsl:analyze-string select="." regex="!\[.*\]\(.*\)" flags="s">
+            <xsl:matching-substring>
+                <xsl:variable name="q">"</xsl:variable>
+                <xsl:variable name="ref" select="substring-before(substring-after(., '('), ')')"/>
+                <xsl:variable name="href" select="if (contains($ref, $q)) then substring-before($ref, $q) else $ref"/>
+                <xsl:variable name="title" select="if (contains($ref, $q)) then substring-before(substring-after($ref, $q), $q) else ''"/>
+                <xsl:variable name="image">
+                    <image>
+                        <xsl:attribute name="href" select="$href"/>
+                        <alt>
+                            <xsl:value-of select="substring-before(substring-after(., '['), ']')"/>
+                        </alt>
+                    </image>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$title!=''">
+                        <fig>
+                            <title><xsl:value-of select="$title"/></title>
+                            <xsl:copy-of select="$image"/>
+                        </fig>
+                    </xsl:when>
+                    <xsl:otherwise><xsl:copy-of select="$image"/></xsl:otherwise>
+                </xsl:choose>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
+        </xsl:analyze-string>
+    </xsl:template>
+
+    
     
     <xsl:template match="node() | @*" mode="fixQuickLinks">
         <xsl:copy>
@@ -62,7 +98,7 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[self::text()]" mode="fixInlineCode">
-        <xsl:analyze-string select="." regex="`..*`">
+        <xsl:analyze-string select="." regex="`..*`" flags="s">
             <xsl:matching-substring>
                 <xsl:element name="codeph">
                     <xsl:value-of select="substring-before(substring-after(., '`'), '`')"/>
@@ -71,10 +107,8 @@
             <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
         </xsl:analyze-string>
     </xsl:template>
-    
-    
 
-    <sch:pattern>
+    <sch:pattern id="lists-codeblocks-quotes">
         <sch:rule context="p">
             <sch:let name="this" value="."/>
             <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
@@ -132,7 +166,7 @@
             </sch:report>
             <sqf:fix id="createOrderedListFromParagraph">
                 <sqf:description>
-                    <sqf:title>Transform this into an item in a new ordered list</sqf:title>
+                    <sqf:title>Create an ordered list</sqf:title>
                 </sqf:description>
                 <sqf:add position="after">
                     <ol>
@@ -162,7 +196,7 @@
             </sch:report>
             <sqf:fix id="createCodeblockFromParagraph">
                 <sqf:description>
-                    <sqf:title>Transform this into a code block</sqf:title>
+                    <sqf:title>Create a code block</sqf:title>
                 </sqf:description>
                 <sqf:add position="after">
                     <codeblock>
@@ -181,7 +215,7 @@
             </sch:report>
             <sqf:fix id="createQuoteFromParagraph">
                 <sqf:description>
-                    <sqf:title>Transform this into a quote</sqf:title>
+                    <sqf:title>Create a quote</sqf:title>
                 </sqf:description>
                 <sqf:add position="after">
                     <lq>
@@ -207,10 +241,27 @@
         </sch:rule>
     </sch:pattern>
 
-    <sch:pattern>
+    <sch:pattern id="links-images">
+        <sch:rule context="p[matches(., '!\[.*\]\(.*\)', 's')]|li[not(descendant-or-self::p)][matches(., '!\[.*\]\(.*\)', 's')]">
+            <!-- Convert Markdown images to DITA image or figure -->
+            <sch:report test="true()" role="info" sqf:fix="convertMarkdownImages2DITA">
+                Paragraph contains image references in Markdown format! These should be converted to 
+                DITA image or, in case we have a title, a DITA figure.
+            </sch:report>
+            <sqf:fix id="convertMarkdownImages2DITA">
+                <sqf:description>
+                    <sqf:title>Create images references</sqf:title>
+                </sqf:description>
+                <sqf:add position="after">
+                    <xsl:apply-templates mode="fixImages" select="."/>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
+        
         <sch:rule context="p|li[not(descendant-or-self::p)]">
             <!-- Convert Markdown links to DITA cross referernces -->
-            <sch:report test="matches(., '\[.*\]\(.*\)')" role="info" sqf:fix="convertMarkdownLinks2XReferences">
+            <sch:report test="matches(., '\[.*\]\(.*\)', 's')" role="info" sqf:fix="convertMarkdownLinks2XReferences">
                 Paragraph contains links in Markdown format! These should be converted to 
                 DITA cross references.
             </sch:report>
@@ -222,8 +273,12 @@
                     <xsl:apply-templates mode="fixLinks" select="."/>
                 </sqf:add>
                 <sqf:delete/>
-            </sqf:fix>
-            
+            </sqf:fix>            
+        </sch:rule>
+    </sch:pattern>
+    
+    <sch:pattern id="quickLinks">
+        <sch:rule context="p|li[not(descendant-or-self::p)]">
             <!-- Convert Markdown quick links to DITA cross referernces -->
             <sch:report test="matches(., '&lt;http(s?)://.*>')" role="info" sqf:fix="convertMarkdownQuickLinks2XReferences">
                 Paragraph contains links in Markdown format! These should be converted to 
@@ -238,12 +293,13 @@
                 </sqf:add>
                 <sqf:delete/>
             </sqf:fix>
-            
-            
-            
-            
+        </sch:rule>
+    </sch:pattern>
+    
+    <sch:pattern id="codephrase">
+        <sch:rule context="p|li[not(descendant-or-self::p)]">
             <!-- Convert inline code to codeph -->
-            <sch:report test="matches(., '`.[^`].*`')" role="info" sqf:fix="convertMarkdowncode2Codeph">
+            <sch:report test="matches(., '`.[^`].*`', 's')" role="info" sqf:fix="convertMarkdowncode2Codeph">
                 Paragraph contains inline code fragments! These should be converted to 
                 DITA code phase (codeph) elements.
             </sch:report>
@@ -256,15 +312,15 @@
                 </sqf:add>
                 <sqf:delete/>
             </sqf:fix>
-            
         </sch:rule>
     </sch:pattern>
 
-    <sch:pattern>
+    <sch:pattern id="topics">
         <sch:rule context="body/p[last()]">
             <sch:let name="this" value="."/>
             <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
             <sch:let name="prefix" value="substring($text, 1, 2)"/>
+            <!-- Convert to topics -->
             <sch:report test="starts-with($text, '# ')" 
                 role="info" sqf:fix="createSiblingTopic createInnerTopic">
                 Topic titles should be marked with a title element and placed within a topic.
@@ -308,12 +364,12 @@
         </sch:rule>
     </sch:pattern>
     
-    
-    <sch:pattern>
+    <sch:pattern id="sections">
         <sch:rule context="body/p">
             <sch:let name="this" value="."/>
             <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
             <sch:let name="prefix" value="substring($text, 1, 3)"/>
+            <!-- Convert to sections -->
             <sch:report test="starts-with($text, '## ')" 
                 role="info" sqf:fix="createSection">
                 Section titles should be marked with a title element and placed within a section.
@@ -338,6 +394,5 @@
             </sqf:fix>
         </sch:rule>
     </sch:pattern>
-    
 
 </sch:schema>
