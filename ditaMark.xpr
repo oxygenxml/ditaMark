@@ -12,6 +12,62 @@
                         </String-array>
                     </entry>
                     <entry>
+                        <String>author.editing.mode</String>
+                        <authorSchemaAwareOptions>
+                            <field name="isVerifyDeleteElementTagsAction">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="enableSmartDelete">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="isVerifyPasteAndDNDAction">
+                                <Boolean>false</Boolean>
+                            </field>
+                            <field name="enableSmartPaste">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="isVerifyTypingAction">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="enableSmartTyping">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="insertOnlyElemensFromCCList">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="insertOnlyAttributeValuesFromCCList">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="showAllPossibleElementsInCCList">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="isVerifyJoinAction">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="schemaAwareEditingMode">
+                                <String>schema_aware_editing_custom</String>
+                            </field>
+                            <field name="isVerifyUnwrapAction">
+                                <Boolean>true</Boolean>
+                            </field>
+                            <field name="showAvailableCCItemsOnEnter">
+                                <Boolean>false</Boolean>
+                            </field>
+                        </authorSchemaAwareOptions>
+                    </entry>
+                    <entry>
+                        <String>author.quick.up.down.navigation</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                    <entry>
+                        <String>key.author.caret.navigation.option.pane</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                    <entry>
+                        <String>key.author.editor.schema.aware.option.pane</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                    <entry>
                         <String>key.editor.document.type.custom.locations.option.pane</String>
                         <Boolean>true</Boolean>
                     </entry>
