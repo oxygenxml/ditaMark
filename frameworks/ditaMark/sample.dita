@@ -35,7 +35,11 @@
         <p>We can combine a link and a list</p>
         <p>* See the [oXygen website](http://www.oxygenxml.com) for more details.</p>
         <p>We can handle also `inline code` markup [oXygen website](http://www.oxygenxml.com).</p>
+        <p>Sections can be easily created by using ## to mark their title.</p>
+        <p>## gigi </p>
         <p>And so on... additional rules can be added to allow learning DITA from a Markdown
             perspective.</p>
+        <p>On the last paragraph you can use # to mark an inner or sibling topic title</p>
+        <p># New topic</p>
     </body>
 </topic>

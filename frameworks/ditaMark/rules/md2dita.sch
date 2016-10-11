@@ -223,4 +223,84 @@
         </sch:rule>
     </sch:pattern>
 
+    <sch:pattern>
+        <sch:rule context="body/p[last()]">
+            <sch:let name="this" value="."/>
+            <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
+            <sch:let name="prefix" value="substring($text, 1, 2)"/>
+            <sch:report test="starts-with($text, '# ')" 
+                role="info" sqf:fix="createSiblingTopic createInnerTopic">
+                Topic titles should be marked with a title element and placed within a topic.
+            </sch:report>
+            
+            <sqf:fix id="createInnerTopic">
+                <sqf:description>
+                    <sqf:title>Create inner topic with this title</sqf:title>
+                </sqf:description>
+                <sch:let name="topic" value="local-name(/*)"/>
+                <sqf:add match="parent::body" position="after">
+                    <xsl:element name="{$topic}">
+                        <title>
+                            <xsl:apply-templates select="p[last()]/node()" mode="copyExceptPrefix">
+                                <xsl:with-param name="prefix" select="$prefix"/>
+                            </xsl:apply-templates>
+                        </title>
+                        <body><p></p></body>
+                    </xsl:element>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+            
+            <sqf:fix id="createSiblingTopic" use-when="ancestor::topic[parent::topic]">
+                <sqf:description>
+                    <sqf:title>Create sibling topic with this title</sqf:title>
+                </sqf:description>
+                <sch:let name="topic" value="local-name(/*)"/>
+                <sqf:add match="ancestor::topic[1]" position="after">
+                    <xsl:element name="{$topic}">
+                        <title>
+                            <xsl:apply-templates select="body/p[last()]/node()" mode="copyExceptPrefix">
+                                <xsl:with-param name="prefix" select="$prefix"/>
+                            </xsl:apply-templates>
+                        </title>
+                        <body><p></p></body>
+                    </xsl:element>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
+    </sch:pattern>
+    
+    
+    <sch:pattern>
+        <sch:rule context="body/p">
+            <sch:let name="this" value="."/>
+            <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
+            <sch:let name="prefix" value="substring($text, 1, 3)"/>
+            <sch:report test="starts-with($text, '## ')" 
+                role="info" sqf:fix="createSection">
+                Section titles should be marked with a title element and placed within a section.
+            </sch:report>
+            
+            <sqf:fix id="createSection">
+                <sqf:description>
+                    <sqf:title>Create a new section with this title</sqf:title>
+                </sqf:description>
+                
+                <sqf:add position="after">
+                    <section>
+                        <title>
+                            <xsl:apply-templates mode="copyExceptPrefix">
+                                <xsl:with-param name="prefix" select="$prefix"/>
+                            </xsl:apply-templates>
+                        </title>
+                        <p></p>
+                    </section>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
+    </sch:pattern>
+    
+
 </sch:schema>
