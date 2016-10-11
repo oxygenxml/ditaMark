@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic_gsq_fv3_nx">
+    <title>The path from Markdown to DITA</title>
+    <body>
+        <p>Lists, unordered and ordered:</p>
+        <p>* item </p>
+        <p>* another item</p>
+        <p>* one more</p>
+        <p>We can use both * and - to signal a list item</p>
+        <p>- sample</p>
+        <p>- using</p>
+        <p>- dash</p>
+        <p>If we already have a list a new item at the end will be added to the existing list</p>
+        <ul id="ul_pdt_5ts_4x">
+            <li>sample</li>
+            <li>list </li>
+        </ul>
+        <p>* another item</p>
+        <p>Ordered lists start with '1.' like below:</p>
+        <p>1. first Item  </p>
+        <p>1. second item</p>
+        <p>1. third item</p>
+        <p>But the actual number after the first one is not really important:</p>
+        <p>1. first item</p>
+        <p>4. second item</p>
+        <p>9. third item</p>
+        <p>Quotes are also recognized</p>
+        <p>> This is something</p>
+        <p>> George said some time ago</p>
+        <p>You can also define a Markdown like code block</p>
+        <p>``` code </p>
+        <p>Links are also detected and converted to cross references, like this one: </p>
+        <p>See the [oXygen website](http://www.oxygenxml.com) for more details.</p>
+        <p>We can combine a link and a list</p>
+        <p>* See the [oXygen website](http://www.oxygenxml.com) for more details.</p>
+        <p>We can handle also `inline code` markup [oXygen website](http://www.oxygenxml.com).</p>
+        <p>And so on... additional rules can be added to allow learning DITA from a Markdown
+            perspective.</p>
+    </body>
+</topic>
