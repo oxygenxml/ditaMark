@@ -360,6 +360,28 @@
     </sch:pattern>
 
     <sch:pattern id="topics">
+        <sch:rule context="body[not(preceding-sibling::title)]/*[1][self::p]">
+            <sch:let name="this" value="."/>
+            <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
+            <sch:let name="prefix" value="substring($text, 1, 2)"/>
+            <sch:report test="starts-with(., '# ')" role="info" sqf:fix="createTitle">
+                Topic titles should be marked with a title element.
+            </sch:report>
+            <sqf:fix id="createTitle">
+                <sqf:description>
+                    <sqf:title>Transform into title</sqf:title>
+                </sqf:description>
+                <sqf:add match="parent::body/parent::*" position="first-child">
+                    <title>
+                        <xsl:apply-templates mode="copyExceptPrefix" select="$this/node()">
+                            <xsl:with-param name="prefix" select="$prefix"/>
+                        </xsl:apply-templates>
+                    </title>
+                </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
+        
         <sch:rule context="body/p[last()]">
             <sch:let name="this" value="."/>
             <sch:let name="text" value="node()[1][self::text()]/normalize-space()"/>
