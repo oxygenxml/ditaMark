@@ -51,7 +51,7 @@
                 <xsl:variable name="title" select="if (contains($ref, $q)) then substring-before(substring-after($ref, $q), $q) else ''"/>
                 <xsl:variable name="image">
                     <xsl:element name="image">
-                        <xsl:attribute name="href" select="$href"/>
+                        <xsl:attribute name="href" select="normalize-space($href)"/>
                         <xsl:element name="alt">
                             <xsl:value-of select="substring-before(substring-after(., '['), ']')"/>
                         </xsl:element>
