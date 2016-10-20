@@ -118,7 +118,8 @@ Something like
 
 ``` 
   ` ` ` 
-  1+1=2 
+  1+1=2
+  2+2=4
   ` ` ` 
 ```
 
@@ -126,14 +127,17 @@ results into a `codeblock` element
 
 ```xml
 <codeblock>
-  1+1=2
+1+1=2
+2+2=4
 </codeblock>
 ```
 
 rendered as
 
 ``` 
-  1+1=2 
+1+1=2
+2+2=4
+ 
 ```
 
 

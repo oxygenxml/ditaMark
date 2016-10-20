@@ -234,13 +234,13 @@
             </sqf:fix>
             
             <!-- Convert Markdown code to DITA codeblocks -->
-            <sch:report test="starts-with($text, '```')" role="info" sqf:fix="createCodeblockFromParagraph"
-                sqf:default-fix="createCodeblockFromParagraph">
+            <sch:report test="starts-with($text, '```')" role="info" 
+                sqf:fix="createCodeblockFromParagraph createCodeblockFromParagraphs">
                 Code fragments should be placed within a "codeblock" element.
             </sch:report>
-            <sqf:fix id="createCodeblockFromParagraph">
+            <sqf:fix id="createCodeblockFromParagraph" use-when="not(following-sibling::p[.='```'])">
                 <sqf:description>
-                    <sqf:title>Create a code block</sqf:title>
+                    <sqf:title>Create a code block from the current paragraph</sqf:title>
                 </sqf:description>
                 <sqf:add position="after">
                     <codeblock>
@@ -249,6 +249,23 @@
                         </xsl:apply-templates>
                     </codeblock>
                 </sqf:add>
+                <sqf:delete/>
+            </sqf:fix>
+            <sqf:fix id="createCodeblockFromParagraphs" use-when="following-sibling::p[.='```']">
+                <sqf:description>
+                    <sqf:title>Create a code block from multiple paragraphs</sqf:title>
+                </sqf:description>
+                <sqf:add position="after">
+                    <xsl:element name="codeblock">
+                        <xsl:for-each select="following-sibling::p[.='```'][1]/preceding-sibling::p[$this &lt;&lt; .]">
+                            <xsl:copy-of select="node()"/>
+                            <xsl:if test="position()!=last()">
+                                <xsl:text>&#10;</xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:element>
+                </sqf:add>
+                <sqf:delete match="following-sibling::p[.='```'][1]/(preceding-sibling::p[$this &lt;&lt; .], self::p)"/>
                 <sqf:delete/>
             </sqf:fix>
             
