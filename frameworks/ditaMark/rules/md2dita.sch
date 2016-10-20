@@ -50,19 +50,19 @@
                 <xsl:variable name="href" select="if (contains($ref, $q)) then substring-before($ref, $q) else $ref"/>
                 <xsl:variable name="title" select="if (contains($ref, $q)) then substring-before(substring-after($ref, $q), $q) else ''"/>
                 <xsl:variable name="image">
-                    <image>
+                    <xsl:element name="image">
                         <xsl:attribute name="href" select="$href"/>
-                        <alt>
+                        <xsl:element name="alt">
                             <xsl:value-of select="substring-before(substring-after(., '['), ']')"/>
-                        </alt>
-                    </image>
+                        </xsl:element>
+                    </xsl:element>
                 </xsl:variable>
                 <xsl:choose>
                     <xsl:when test="$title!=''">
-                        <fig>
-                            <title><xsl:value-of select="$title"/></title>
+                        <xsl:element name="fig">
+                            <xsl:element name="title"><xsl:value-of select="$title"/></xsl:element>
                             <xsl:copy-of select="$image"/>
-                        </fig>
+                        </xsl:element>
                     </xsl:when>
                     <xsl:otherwise><xsl:copy-of select="$image"/></xsl:otherwise>
                 </xsl:choose>
