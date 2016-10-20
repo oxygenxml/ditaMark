@@ -4,13 +4,13 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:template match="node() | @*" mode="copyExceptPrefix">
-        <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="copy"/>
+        <xsl:copy copy-namespaces="no">
+            <xsl:apply-templates select="node() | @* except @class" mode="copy"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node() | @*" mode="copy">
-        <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="copy"/>
+        <xsl:copy copy-namespaces="no">
+            <xsl:apply-templates select="node() | @* except @class" mode="copy"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[position()=1][self::text()]" mode="copyExceptPrefix">
@@ -19,8 +19,8 @@
     </xsl:template>
 
     <xsl:template match="node() | @*" mode="fixLinks">
-        <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="fixLinks"/>
+        <xsl:copy copy-namespaces="no">
+            <xsl:apply-templates select="node() | @* except @class" mode="fixLinks"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[self::text()]" mode="fixLinks">
@@ -38,8 +38,8 @@
     </xsl:template>
     
     <xsl:template match="node() | @*" mode="fixImages">
-        <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="fixImages"/>
+        <xsl:copy copy-namespaces="no">
+            <xsl:apply-templates select="node() | @* except @class" mode="fixImages"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[self::text()]" mode="fixImages">
@@ -72,8 +72,8 @@
     </xsl:template>
     
     <xsl:template match="node() | @*" mode="fixQuickLinks">
-        <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="fixQuickLinks"/>
+        <xsl:copy copy-namespaces="no">
+            <xsl:apply-templates select="node() | @* except @class" mode="fixQuickLinks"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[self::text()]" mode="fixQuickLinks">
@@ -90,8 +90,8 @@
     </xsl:template>
     
     <xsl:template match="node() | @*" mode="fixInlineCode">
-        <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="fixInlineCode"/>
+        <xsl:copy copy-namespaces="no">
+            <xsl:apply-templates select="node() | @* except @class" mode="fixInlineCode"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="node()[self::text()]" mode="fixInlineCode">
@@ -233,7 +233,7 @@
                 <sqf:delete/>
             </sqf:fix>
             
-            <!-- Comvert Markdown code to DITA codeblocks -->
+            <!-- Convert Markdown code to DITA codeblocks -->
             <sch:report test="starts-with($text, '```')" role="info" sqf:fix="createCodeblockFromParagraph"
                 sqf:default-fix="createCodeblockFromParagraph">
                 Code fragments should be placed within a "codeblock" element.
@@ -399,6 +399,9 @@
                 <sch:let name="topic" value="local-name(/*)"/>
                 <sqf:add match="parent::body" position="after">
                     <xsl:element name="{$topic}">
+                        <xsl:attribute name="id" select="concat('topic_', 
+                            translate(string(current-dateTime()),translate(string(current-dateTime()),'012345679', ''),'')
+                            )"/>
                         <title>
                             <xsl:apply-templates select="p[last()]/node()" mode="copyExceptPrefix">
                                 <xsl:with-param name="prefix" select="$prefix"/>
@@ -417,6 +420,9 @@
                 <sch:let name="topic" value="local-name(/*)"/>
                 <sqf:add match="ancestor::topic[1]" position="after">
                     <xsl:element name="{$topic}">
+                        <xsl:attribute name="id" select="concat('topic_', 
+                            translate(string(current-dateTime()),translate(string(current-dateTime()),'012345679', ''),'')
+                            )"/>
                         <title>
                             <xsl:apply-templates select="body/p[last()]/node()" mode="copyExceptPrefix">
                                 <xsl:with-param name="prefix" select="$prefix"/>
