@@ -100,7 +100,7 @@ that renders as
 
 ### Code blocks 
 
-Something like
+Something like ( note that additional spaces are added below between \` symbols, in order to make them visible in the Markdown code block)
 
 ``` 
   ` ` ` 
