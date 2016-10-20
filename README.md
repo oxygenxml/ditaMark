@@ -94,7 +94,7 @@ that renders as
 
 ## Code blocks 
 
-Something 
+Something like
 
 ``` 
   ``` 
@@ -152,6 +152,7 @@ for more details.
 ```
 
 rendered as
+
 See the [oXygen website](http://www.oxygenxml.com) for more details.
 
 Or we can have quick links like
@@ -257,13 +258,6 @@ converted to something like
 </table>
 ```
 
-rendered as
-
-|test|table|conversion|
-|-|-|-|
-|1|2|3|
-|1|2|3|
-
 We can similarly convert tables without a header row:
 
 ```
@@ -295,11 +289,6 @@ to
     </tgroup>
 </table>
 ```
-
-|-|-|-|
-|1|2|3|
-|1|2|3|
-
 
 ## Sections
 
