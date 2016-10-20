@@ -1,36 +1,22 @@
 # DITA Markdown framework
 
-An extension of the oXygen XML Editor DITA framework that adds support for 
-recognizing and converting Markdown structures written in DITA paragraphs to 
-the corresponding DITA markup.
+An extension of the oXygen XML Editor DITA framework that adds support for recognizing and converting Markdown structures written in DITA paragraphs to the corresponding DITA markup.
 
-This project shows how we can help people that know Markdown to transition to DITA. 
-You can write Markdown fragments in DITA paragraphs and these will be recognized, 
-you will be notified and offered to replace the Markdown fragment with the 
-corresponding DITA markup.
+This project shows how we can help people that know Markdown to transition to DITA.  You can write Markdown fragments in DITA paragraphs and these will be recognized, you will be notified and offered to replace the Markdown fragment with the corresponding DITA markup.
 
 ## Testing
-Just open the `ditaMark.xpr` file in [oXygen XML Editor](http://www.oxygenxml.com) 
-standalone and the framework should be automatically installed. Open then a DITA topic, 
-like the `test.dita` file from this project and in paragraphs add Markdown content and 
-observe the reported messages and the offered solutions - below you can find details on
-what is handled.
+Just open the `ditaMark.xpr` file in [oXygen XML Editor](http://www.oxygenxml.com)  standalone and the framework should be automatically installed. Open then a DITA topic, like the `frameworks/ditaMark/sample.dita` if you want a sample file, or `test.dita` if you want to start from an empty file, both from this project, and in paragraphs add Markdown content and observe the reported messages and the offered solutions - below you can find details on what is handled.
 
-Another option is to drop the `frameworks/ditaMark` folder inside oXygen XML Editor
-`frameworks` folder, or you can define the project `frameworks` folder in 
-*oXygen Preferences -- Document Type Associations -- Locations* as a folder containing
-frameworks.
+Another option to install the framework is to drop the `frameworks/ditaMark` folder inside oXygen XML Editor `frameworks` folder, or you can define the project `frameworks` folder in  *oXygen Preferences -- Document Type Associations -- Locations* as a folder containing frameworks.
 
 ## Technology
 
 From a technology point of view, this project uses [Schematron](http://schematron.com/)
-for validation and [Schematron Quick Fixes](http://schematron-quickfix.github.io/sqf/publishing-snapshots/April2015Draft/spec/SQFSpec.html) 
-(SQF) for providing the automatic conversions as quick fixes.
+for validation and [Schematron Quick Fixes](http://schematron-quickfix.github.io/sqf/publishing-snapshots/April2015Draft/spec/SQFSpec.html) (SQF) for providing the automatic conversions as quick fixes.
 
 ## What is supported
 
-Examples of the Markdown fragments that are recognized and converted to DITA are 
-described below.
+Examples of the Markdown fragments that are recognized and converted to DITA are described below.
 
 ### Lists
   
