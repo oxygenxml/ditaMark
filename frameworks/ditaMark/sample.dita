@@ -38,7 +38,7 @@
             <p>> other projects. </p>
         </section>
         <section id="section_wfq_pzt_4x">
-            <title>Code block and inline code</title>
+            <title>Code blocks and inline code</title>
             <p>``` 1+1=2</p>
             <p>We can handle also `inline code` markup </p>
         </section>
