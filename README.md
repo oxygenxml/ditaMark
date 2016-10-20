@@ -9,10 +9,30 @@ You can write Markdown fragments in DITA paragraphs and these will be recognized
 you will be notified and offered to replace the Markdown fragment with the 
 corresponding DITA markup.
 
+## Testing
+Just open the `ditaMark.xpr` file in [oXygen XML Editor](http://www.oxygenxml.com) 
+standalone and the framework should be automatically installed. Open then a DITA topic, 
+like the `test.dita` file from this project and in paragraphs add Markdown content and 
+observe the reported messages and the offered solutions - below you can find details on
+what is handled.
+
+Another option is to drop the `frameworks/ditaMark` folder inside oXygen XML Editor
+`frameworks` folder, or you can define the project `frameworks` folder in 
+*oXygen Preferences -- Document Type Associations -- Locations* as a folder containing
+frameworks.
+
+## Technology
+
+From a technology point of view, this project uses [Schematron](http://schematron.com/)
+for validation and [Schematron Quick Fixes](http://schematron-quickfix.github.io/sqf/publishing-snapshots/April2015Draft/spec/SQFSpec.html) 
+(SQF) for providing the automatic conversions as quick fixes.
+
+## What is supported
+
 Examples of the Markdown fragments that are recognized and converted to DITA are 
 described below.
 
-## Lists
+### Lists
   
 Something like 
 
@@ -66,7 +86,7 @@ rendered as
 2. item 2
 3. item 3  
 
-## Quotes
+### Quotes
 
 Something like
 
@@ -92,7 +112,7 @@ that renders as
 > quote text
 > quote text
 
-## Code blocks 
+### Code blocks 
 
 Something like
 
@@ -117,7 +137,7 @@ rendered as
 ```
 
 
-## Inline code
+### Inline code
 
 Something like
 
@@ -135,7 +155,7 @@ rendered as
 
 This is a `test` for inline code.
 
-## Links
+### Links
 
 Links are also detected and converted to cross references. 
 
@@ -172,7 +192,7 @@ rendered as
 <http://www.oxygenxml.com>
 
 
-## Images
+### Images
 
 An image using Markdown format will be converted to a `figure` or `image` element, 
 depending whether there is a title or not.
@@ -216,7 +236,7 @@ rendered as
 
 In this case we obtain only an image ![oXygen logo](https://www.oxygenxml.com/img/resources/oxygen190x62.png) which is rendered inline.
 
-## Tables
+#### Tables
 
 We can convert tables with header row:
 
@@ -290,7 +310,7 @@ to
 </table>
 ```
 
-## Sections
+### Sections
 
 Sections can be easily created by using ## to mark their title.
 
@@ -308,7 +328,7 @@ results in something like
 ```        
 
 
-##  Inner and sibling topics
+###  Inner and sibling topics
 
 On the last paragraph you can use # to mark an inner or sibling topic title
 
