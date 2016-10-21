@@ -207,7 +207,11 @@ In this case we have a title, so we should get a figure
 
 rendered as
 
-In this case we have a title, so we should get a figure ![oXygen logo](https://www.oxygenxml.com/img/resources/oxygen190x62.png "One of the oXygen logos") which is a block!
+In this case we have a title, so we should get a figure 
+
+![oXygen logo](https://www.oxygenxml.com/img/resources/oxygen190x62.png "One of the oXygen logos") 
+
+which is a block!
 
 If we do not have a title then an inline `image` element is generated 
 
