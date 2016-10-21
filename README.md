@@ -1,4 +1,4 @@
-# DITA Markdown framework
+# The path from Markdown to DITA - DITAMark framework
 
 An extension of the oXygen XML Editor DITA framework that adds support for recognizing and converting Markdown structures written in DITA paragraphs to the corresponding DITA markup.
 
