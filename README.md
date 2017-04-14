@@ -5,9 +5,12 @@ An extension of the oXygen XML Editor DITA framework that recognizes Markdown st
 This project shows how oXygen can help people that know Markdown to transition to DITA. They can write Markdown fragments in DITA paragraphs and these will be recognized, they will be notified and offered to replace the Markdown fragment with the corresponding DITA markup.
 
 ## Testing
-Just open the `ditaMark.xpr` file in [oXygen XML Editor](http://www.oxygenxml.com)  standalone and the framework should be automatically installed. Open then a DITA topic, like the `frameworks/ditaMark/sample.dita` if you want a sample file, or `test.dita` if you want to start from an empty file, both from this project, and in paragraphs add Markdown content and observe the reported messages and the offered solutions - below you can find details on what is handled.
+Just clone or download the project and open the `ditaMark.xpr` file in [oXygen XML Editor](http://www.oxygenxml.com) standalone and the framework should be automatically installed. Open then a DITA topic, like the `frameworks/ditaMark/sample.dita` if you want a sample file, or `test.dita` if you want to start from an empty file, both from this project, and in paragraphs add Markdown content and observe the reported messages and the offered solutions - below you can find details on what is handled.
 
 Another option to install the framework is to drop the `frameworks/ditaMark` folder inside oXygen XML Editor `frameworks` folder, or you can define the project `frameworks` folder in  *oXygen Preferences -- Document Type Associations -- Locations* as a folder containing frameworks.
+
+You can also [test it online](https://www.oxygenxml.com/webapp-demo-aws/app/oxygen.html?url=github%3A%2F%2FgetFileContent%2Foxygenxml%2FditaMark%2Fmaster%2Ftest.dita) using the [oXygen XML Web Author](http://www.oxygenxml.com/webauthor), the above link opens the `test.dita` topic that should provide proposals to convert Markdown fragments to DITA.
+
 
 ## Technology
 
