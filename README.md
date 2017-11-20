@@ -9,7 +9,7 @@ Just clone or download the project and open the `ditaMark.xpr` file in [oXygen X
 
 Another option to install the framework is to drop the `frameworks/ditaMark` folder inside oXygen XML Editor `frameworks` folder, or you can define the project `frameworks` folder in  *oXygen Preferences -- Document Type Associations -- Locations* as a folder containing frameworks.
 
-You can also [test it online](https://www.oxygenxml.com/webapp-demo-aws/app/oxygen.html?url=github%3A%2F%2FgetFileContent%2Foxygenxml%2FditaMark%2Fmaster%2Ftest.dita&splitOnEnter=true) using the [oXygen XML Web Author](http://www.oxygenxml.com/webauthor), the test link opens the `test.dita` topic that should provide proposals to convert Markdown fragments to DITA.
+You can also [test it online](https://www.oxygenxml.com/webapp-demo-aws/app/oxygen.html?url=github%3A%2F%2FgetFileContent%2Foxygenxml%2FditaMark%2Fmaster%2Ftest.dita) using the [oXygen XML Web Author](http://www.oxygenxml.com/webauthor), the test link opens the `test.dita` topic that should provide proposals to convert Markdown fragments to DITA.
 
 
 ## Technology
